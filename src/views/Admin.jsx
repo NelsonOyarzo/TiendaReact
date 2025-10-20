@@ -1,0 +1,11 @@
+import React, {useEffect, useState} from 'react';
+import { listProducts, createProduct, deleteProduct } from '../data/data';
+import ProductList from '../components/ProductList';
+export default function Admin(){
+  const [products,setProducts]=useState([]); const [form,setForm]=useState({name:'',price:0,category:'General',stock:0,description:'',onSale:false});
+  useEffect(()=> setProducts(listProducts()),[]);
+  function refresh(){ setProducts(listProducts()); }
+  function handleCreate(e){ e.preventDefault(); createProduct({...form, price:Number(form.price), stock:Number(form.stock)}); refresh(); setForm({name:'',price:0,category:'General',stock:0,description:'',onSale:false}); }
+  function handleDelete(id){ if(window.confirm('Eliminar?')){ deleteProduct(id); refresh(); } }
+  return (<div><h2>Admin</h2><div className="row"><div className="col-md-4"><h5>Crear producto</h5><form onSubmit={handleCreate}><input className="form-control mb-2" placeholder="Nombre" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} required/><input className="form-control mb-2" placeholder="Precio" type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} required/><input className="form-control mb-2" placeholder="Categoría" value={form.category} onChange={e=>setForm({...form,category:e.target.value})} required/><input className="form-control mb-2" placeholder="Stock" type="number" value={form.stock} onChange={e=>setForm({...form,stock:e.target.value})} required/><textarea className="form-control mb-2" placeholder="Descripción" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} /><div className="form-check mb-2"><input className="form-check-input" type="checkbox" checked={form.onSale} onChange={e=>setForm({...form,onSale:e.target.checked})} id="onsale"/><label className="form-check-label" htmlFor="onsale">En oferta</label></div><button className="btn btn-success" type="submit">Crear</button></form></div><div className="col-md-8"><h5>Productos</h5><ProductList products={products} onDelete={handleDelete} /></div></div></div>);
+}

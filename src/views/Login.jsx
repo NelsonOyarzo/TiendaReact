@@ -1,0 +1,6 @@
+import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+export default function Login(){ const [name,setName]=useState(''); const [email,setEmail]=useState(''); const [isAdmin,setIsAdmin]=useState(false); const { login } = useAuth(); const navigate = useNavigate();
+function handleSubmit(e){ e.preventDefault(); login({name,email,isAdmin}); navigate('/'); }
+return (<div className="row justify-content-center"><div className="col-md-6"><h2>Login (mock)</h2><form onSubmit={handleSubmit}><div className="mb-3"><label>Nombre</label><input className="form-control" value={name} onChange={e=>setName(e.target.value)} required/></div><div className="form-check mb-2"><input className="form-check-input" type="checkbox" checked={isAdmin} onChange={e=>setIsAdmin(e.target.checked)} id="adminCheck"/><label className="form-check-label" htmlFor="adminCheck">Iniciar como Administrador</label></div><div className="mb-3"><label>Email</label><input className="form-control" value={email} onChange={e=>setEmail(e.target.value)} required/></div><button className="btn btn-primary" type="submit">Ingresar</button></form></div></div>); }
